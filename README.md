@@ -1,3 +1,6 @@
-## NextJS workshop
+# NextJS workshop
 
-# clone and `npm i`, then `npm run dev`
+### To start:
+
+- clone and `npm i`
+- `npm run dev`
