@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const ButtonContainer = styled.button`
-  background-color: ${({ theme }) => theme.colors.primary};
-  border-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.secondary};
+  border-color: ${({ theme }) => theme.colors.secondary};
   color: ${({ theme }) => theme.colors.black};
   font-family: ${({ theme }) => theme.typography.default};
   font-size: 100%;

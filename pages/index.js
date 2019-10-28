@@ -1,13 +1,7 @@
 import React from 'react'
-import { Button, Heading } from 'components'
 
 function Home() {
-  return (
-    <>
-      <Heading>Hello, ReactDC</Heading>
-      <Button label="Do the thing" />
-    </>
-  )
+  return <p>Home page content goes here</p>
 }
 
 export default Home

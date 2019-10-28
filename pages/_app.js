@@ -4,7 +4,7 @@ import App from 'next/app'
 import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'
 
-import { GlobalStyle, theme } from 'components'
+import { GlobalStyle, Layout, theme } from 'components'
 
 class MyApp extends App {
   // Only uncomment this method if you have blocking data requirements for
@@ -21,6 +21,7 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps } = this.props
+
     return (
       <ThemeProvider theme={theme}>
         <>
@@ -28,7 +29,9 @@ class MyApp extends App {
             <title>NextJS Demo</title>
           </Head>
           <GlobalStyle />
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </>
       </ThemeProvider>
     )
