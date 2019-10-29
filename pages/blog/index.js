@@ -1,12 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
-import fetch from 'isomorphic-unfetch'
 
+<<<<<<< HEAD
 function Blog({ repos }) {
   return (
     <>
       <h3>NextJS repos on GitHub:</h3>
+=======
+function Blog() {
+  return (
+    <>
+      <h3>Blog posts placeholder</h3>
+>>>>>>> master
       <ul>
         {repos.map(item => (
           <li key={item.id}>
@@ -20,6 +26,7 @@ function Blog({ repos }) {
   )
 }
 
+<<<<<<< HEAD
 Blog.propTypes = {
   repos: PropTypes.array.isRequired,
 }
@@ -30,4 +37,6 @@ Blog.getInitialProps = async () => {
   return { repos: json }
 }
 
+=======
+>>>>>>> master
 export default Blog
