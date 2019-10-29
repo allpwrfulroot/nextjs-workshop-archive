@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
 
@@ -17,6 +18,10 @@ function Blog({ repos }) {
       </ul>
     </>
   )
+}
+
+Blog.propTypes = {
+  repos: PropTypes.array.isRequired,
 }
 
 Blog.getInitialProps = async () => {

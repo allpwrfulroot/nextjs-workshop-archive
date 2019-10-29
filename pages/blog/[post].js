@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import fetch from 'isomorphic-unfetch'
 
 function Post({ name, stars }) {
@@ -9,6 +10,11 @@ function Post({ name, stars }) {
       </h3>
     </>
   )
+}
+
+Post.propTypes = {
+  name: PropTypes.string.isRequired,
+  stars: PropTypes.number.isRequired,
 }
 
 Post.getInitialProps = async ctx => {
