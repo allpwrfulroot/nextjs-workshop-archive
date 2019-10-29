@@ -5,7 +5,7 @@ function Post({ name, stars }) {
   return (
     <>
       <h3>
-        PSA: {name} now has {stars} on GitHub
+        PSA: {name} now has {stars} stars on GitHub
       </h3>
     </>
   )
@@ -13,8 +13,7 @@ function Post({ name, stars }) {
 
 Post.getInitialProps = async ctx => {
   const { query } = ctx
-  console.log('query found: ', ctx)
-  const res = await fetch('https://api.github.com/repos/zeit/next.js')
+  const res = await fetch(`https://api.github.com/repos/zeit/${query.post}`)
   const json = await res.json()
   return { stars: json.stargazers_count, name: json.name }
 }

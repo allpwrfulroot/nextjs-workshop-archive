@@ -2,26 +2,27 @@ import React from 'react'
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
 
-function Blog({ stars }) {
+function Blog({ repos }) {
   return (
     <>
-      <h3>PSA: NextJS now has {stars} on GitHub</h3>
+      <h3>NextJS repos on GitHub:</h3>
       <ul>
-        <li>
-          <Link href="/blog/[post]" as="/blog/a-meditation-23948298">
-            <a>A medidtation on the awesomeness of Typhlosion</a>
-          </Link>
-        </li>
+        {repos.map(item => (
+          <li key={item.id}>
+            <Link href="/blog/[post]" as={`/blog/${item.name}`}>
+              <a>{item.name}</a>
+            </Link>
+          </li>
+        ))}
       </ul>
     </>
   )
 }
 
 Blog.getInitialProps = async () => {
-  const res = await fetch('https://api.github.com/repos/zeit/next.js')
+  const res = await fetch('https://api.github.com/orgs/zeit/repos')
   const json = await res.json()
-  console.log('json? ', json)
-  return { stars: json.stargazers_count }
+  return { repos: json }
 }
 
 export default Blog

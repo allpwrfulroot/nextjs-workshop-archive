@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
