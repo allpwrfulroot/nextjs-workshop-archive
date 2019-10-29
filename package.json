@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "analyze": "ANALYZE=true npm run build"
   },
   "husky": {
     "hooks": {

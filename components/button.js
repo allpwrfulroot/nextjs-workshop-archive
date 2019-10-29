@@ -17,10 +17,13 @@ const ButtonContainer = styled.button`
   }
 `
 
-const Button = ({ label }) => <ButtonContainer>{label}</ButtonContainer>
+const Button = ({ label, onClick }) => (
+  <ButtonContainer onClick={onClick}>{label}</ButtonContainer>
+)
 
 Button.propTypes = {
   label: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 }
 
 export default Button

@@ -25,9 +25,11 @@ const StyledLink = styled.a`
 
 function NavLink({ href, children }) {
   const { pathname } = useRouter()
+  const path = pathname.split('/')[1]
+  const isActive = path ? href.includes(path) : href === '/'
   return (
     <Link href={href}>
-      <StyledLink isActive={href === pathname}>{children}</StyledLink>
+      <StyledLink isActive={isActive}>{children}</StyledLink>
     </Link>
   )
 }
