@@ -1,5 +1,7 @@
 # NextJS workshop, part I: Common customizations and options
 
+NOTE: We're starting off with some housekeeping already done: linting, babel plugin, all workshop required packages included. There are also the necessary components to use soon.
+
 Most of the time, we want app-wide settings such as a ThemeProvider, layout, or auth wrapper. However, we don't want to have to repeat ourselves for every page.
 
 You can add app-wide components and configs by customizing `_app.js`. For SSR performance, you can customize `_document.js` as well. We'll customize this app to use `styled-components` and have a custom Layout.
