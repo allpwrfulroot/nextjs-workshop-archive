@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
 
-function Blog({ repos }) {
+function RepoList({ repos }) {
   return (
     <>
       <h3>Vercel repos on GitHub:</h3>
@@ -20,7 +20,7 @@ function Blog({ repos }) {
   )
 }
 
-Blog.propTypes = {
+RepoList.propTypes = {
   repos: PropTypes.array.isRequired,
 }
 
@@ -32,4 +32,4 @@ export async function getServerSideProps() {
   }
 }
 
-export default Blog
+export default RepoList
