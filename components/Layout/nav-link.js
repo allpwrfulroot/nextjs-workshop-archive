@@ -1,7 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 const StyledLink = styled.a`
@@ -24,14 +22,7 @@ const StyledLink = styled.a`
 `
 
 function NavLink({ href, children }) {
-  const { pathname } = useRouter()
-  const path = pathname.split('/')[1]
-  const isActive = path ? href.includes(path) : href === '/'
-  return (
-    <Link href={href}>
-      <StyledLink isActive={isActive}>{children}</StyledLink>
-    </Link>
-  )
+  return <StyledLink href={href}>{children}</StyledLink>
 }
 
 NavLink.propTypes = {

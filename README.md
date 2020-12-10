@@ -1,109 +1,110 @@
-# NextJS workshop, part III: Data fetching options & API routes
+# NextJS workshop, part II: Next Router and Link
 
-### Data fetching options: SSR
+NextJS has components for making client-side routing easy: `next/link` and `next/router`
 
-Let's say we have a page that lists data that gets updated frequently (not realtime, but close), or perhaps the page doesn't get requested often enough to make good use of a cache.
+### Link
 
-For this, we'll use NextJS's server-side rendering capabilities. By adding a `getServerSideProps` function, NextJS will know that we want a
-
-Note: You'll hardly ever use this, typically you'll use `getStaticProps` with a `revalidate` option for [Incremental Static Regeneration](https://nextjs.org/docs/basic-features/data-fetching), but for demo purposes we're going for it
+Client-side transitions are assisted with a special [Link component](https://nextjs.org/docs/api-reference/next/link):
 
 ```
-// Add these to /pages/repos/index.js:
+// Update NavLink on /components/Layout/nav-link.js
+import Link from 'next/link'
 ...
-// just after import Link from 'next/link'
-import fetch from 'isomorphic-unfetch'
-...
-// just before default export RepoList
-export async function getServerSideProps() {
-  const reposList = await fetch('https://api.github.com/orgs/vercel/repos')
-  const json = await reposList.json()
-  return {
-    props: { repos: json },
-  }
-}
-```
-
-### Data fetching options: SSG
-
-Now we'll use NextJS build settings to statically generate pages, to ideally serve from a CDN.
-
-```
-// Add these to /pages/repos/[repo].js:
-...
-// just after import PropTypes from 'prop-types'
-import fetch from 'isomorphic-unfetch'
-...
-
-// just before default export RepoDetails
-export async function getStaticProps(context) {
-  const { params } = context
-  const repoInfo = await fetch(
-    `https://api.github.com/repos/vercel/${params.repo}`
+function NavLink({ href, children }) {
+  return (
+    <Link href={href} passHref>
+      <StyledLink>{children}</StyledLink>
+    </Link>
   )
-  const json = await repoInfo.json()
-  return {
-    props: {
-      stars: json.stargazers_count,
-      name: json.name,
-    },
-  }
-}
-
-export async function getStaticPaths() {
-  const reposList = await fetch('https://api.github.com/orgs/vercel/repos')
-  const json = await reposList.json()
-  const topTen = json.splice(0, 10)
-  const topPaths = topTen.map((t) => ({ params: { repo: t.name } }))
-  return {
-    paths: topPaths, // prerendering the first 10 repos from list
-    fallback: true, // true because some possible paths not prerendered
-  }
 }
 ```
 
-There's a lot going on here! Check out [the docs](https://nextjs.org/docs/basic-features/data-fetching#getstaticprops-static-generation) for more info and options
+### Router
 
-### API routes
-
-Who doesn't want instance microservices to support their app? This is especially great for adding functionality while protecting your processes and secrets/variables. In this case, let's make a little demo that will serve a contact email address!
+NextJS also has its own [Router component](https://nextjs.org/docs/api-reference/next/router). Let's use the `useRouter` hook to highlight NavLink when we're on its page:
 
 ```
-// create new file: /pages/api/my-email.js
-export default async (req, res) => {
-  res.setHeader('Content-Type', 'application/json')
-  res.statusCode = 200
-  res.end(JSON.stringify({ email: 'demo@example.com' }))
+// Update NavLink on /components/Layout/nav-link.js
+import { useRouter } from 'next/router'
+...
+function NavLink({ href, children }) {
+  const { pathname } = useRouter()
+  const path = pathname.split('/')[1]
+  const isActive = path ? href.includes(path) : href === '/'
+  return (
+    <Link href={href} passHref>
+      <StyledLink isActive={isActive}>{children}</StyledLink>
+    </Link>
+  )
 }
 ```
 
+### Dynamic routes
+
+For a long list of blog posts or products, for example, you won't know the page data ahead of time even through all of the page "scaffolding" will be the same. We can handle that easy!
+
 ```
-// Update /pages/contact.js
-import React, { useState } from 'react'
-import { Button } from 'components'
+// create new file: /pages/repos/index.js
+import React from 'react'
+import PropTypes from 'prop-types'
+import Link from 'next/link'
 
-function Contact() {
-  const [email, setEmail] = useState('unknown')
-
-  const getEmail = async () => {
-    try {
-      const res = await fetch('/api/my-email')
-      const json = await res.json()
-      setEmail(json.email)
-    } catch (err) {
-      console.log('err: ', err)
-    }
-  }
-
+function RepoList({ repos }) {
   return (
     <>
-      <p>Contact email: {email}</p>
-      <Button label="Get the email!" onClick={getEmail} />
+      <h3>Vercel repos on GitHub:</h3>
+      <ul>
+        {repos.map((item) => (
+          <li key={item.id}>
+            <Link href={`/repos/${item.name}`}>
+              <a>{item.name}</a>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </>
   )
 }
 
-export default Contact
+RepoList.propTypes = {
+  repos: PropTypes.array,
+}
+
+RepoList.defaultProps = {
+  repos: [{
+    id: 0, name: 'demo1'
+    id: 1, name: 'demo2'
+  }],
+}
+
+export default RepoList
 ```
 
-You can, of course, do a lot with this! Common use cases include auth utilities and fetching protected data.
+```
+// create new file: /pages/repos/[repo].js
+import React from 'react'
+import PropTypes from 'prop-types'
+
+function RepoDetails({ name, stars = 3 }) {
+  if (!name || !stars) {
+    return <p>Loading...</p>
+  }
+
+  return (
+    <>
+      <h3>
+        PSA: {name} now has {stars} stars on GitHub
+      </h3>
+    </>
+  )
+}
+
+RepoDetails.propTypes = {
+  name: PropTypes.string,
+  stars: PropTypes.number,
+}
+
+export default RepoDetails
+```
+
+Bonus question: Can you nest multiple dynamic routes?
