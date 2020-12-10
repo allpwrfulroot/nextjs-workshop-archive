@@ -10,9 +10,10 @@ Note: You'll hardly ever use this, typically you'll use `getStaticProps` with a 
 
 ```
 // Add these to /pages/repos/index.js:
-...
-// just after import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
+...
+// Add the repos prop to RepoList:
+function RepoList({ repos }) {
 ...
 // just before default export RepoList
 export async function getServerSideProps() {
@@ -30,11 +31,8 @@ Now we'll use NextJS build settings to statically generate pages, to ideally ser
 
 ```
 // Add these to /pages/repos/[repo].js:
-...
-// just after import PropTypes from 'prop-types'
 import fetch from 'isomorphic-unfetch'
 ...
-
 // just before default export RepoDetails
 export async function getStaticProps(context) {
   const { params } = context
@@ -66,7 +64,9 @@ There's a lot going on here! Check out [the docs](https://nextjs.org/docs/basic-
 
 ### API routes
 
-Who doesn't want instance microservices to support their app? This is especially great for adding functionality while protecting your processes and secrets/variables. In this case, let's make a little demo that will serve a contact email address!
+Who doesn't want instance microservices to support their app? This is especially great for adding functionality while protecting your processes and secrets/variables.
+
+In this case, let's make a little demo that will serve a contact email address!
 
 ```
 // create new file: /pages/api/my-email.js

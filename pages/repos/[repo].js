@@ -1,23 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
 
-function RepoDetails({ name, stars }) {
-  if (!name || !stars) {
-    return <p>Loading...</p>
-  }
+function RepoDetails() {
+  const { query } = useRouter()
 
-  return (
-    <>
-      <h3>
-        PSA: {name} now has {stars} stars on GitHub
-      </h3>
-    </>
-  )
-}
-
-RepoDetails.propTypes = {
-  name: PropTypes.string,
-  stars: PropTypes.number,
+  return <p>name: {query.repo}</p>
 }
 
 export default RepoDetails

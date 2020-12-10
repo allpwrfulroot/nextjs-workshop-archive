@@ -1,4 +1,3 @@
-// See more at https://nextjs.org/docs#custom-app
 import React from 'react'
 import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'

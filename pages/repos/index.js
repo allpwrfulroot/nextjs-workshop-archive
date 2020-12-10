@@ -23,8 +23,12 @@ RepoList.propTypes = {
   repos: PropTypes.array,
 }
 
+// We will fetch this data server-side in the next chapter
 RepoList.defaultProps = {
-  repos: [],
+  repos: [
+    { id: 0, name: 'apple' },
+    { id: 1, name: 'banana' },
+  ],
 }
 
 export default RepoList
