@@ -11,5 +11,9 @@
     "node": true
   },
   "plugins": ["react"],
-  "extends": ["eslint:recommended", "plugin:react/recommended"]
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:react-hooks/recommended", "plugin:jsx-a11y/recommended", "plugin:prettier/recommended"],
+  "rules": {
+    "react/prop-types": "warn",
+    "jsx-a11y/anchor-is-valid": "warn"
+  }
 }

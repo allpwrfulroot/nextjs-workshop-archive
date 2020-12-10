@@ -7,7 +7,7 @@ const FooterText = styled.p`
 `
 
 function Footer() {
-  return <FooterText>Made with &#9825; in DC</FooterText>
+  return <FooterText>Made with &#9825; in Boston</FooterText>
 }
 
 export default Footer

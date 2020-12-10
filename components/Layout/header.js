@@ -14,12 +14,12 @@ const Nav = styled.nav`
 function Header() {
   return (
     <>
-      <Logo>Hello, ReactDC</Logo>
+      <Logo>Hello, DevWeek NYC</Logo>
       <Nav>
         <NavLink href="/">Home</NavLink>
         <NavLink href="/about">About</NavLink>
         <NavLink href="/contact">Contact</NavLink>
-        <NavLink href="/blog">Blog</NavLink>
+        <NavLink href="/repos">Vercel</NavLink>
       </Nav>
     </>
   )

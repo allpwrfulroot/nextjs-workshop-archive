@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { Button } from 'components'
 
 function Contact() {
-  const [name, setName] = useState('unknown')
+  const [email, setEmail] = useState('unknown')
 
-  const getName = async () => {
+  const getEmail = async () => {
     try {
-      const res = await fetch('/api/my-name')
+      const res = await fetch('/api/my-email')
       const json = await res.json()
-      setName(json.name)
+      setEmail(json.email)
     } catch (err) {
       console.log('err: ', err)
     }
@@ -16,8 +16,8 @@ function Contact() {
 
   return (
     <>
-      <p>Project name: {name}</p>
-      <Button label="Get the name!" onClick={getName} />
+      <p>Contact email: {email}</p>
+      <Button label="Get the email!" onClick={getEmail} />
     </>
   )
 }
