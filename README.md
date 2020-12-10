@@ -1,12 +1,29 @@
-# NextJS workshop, part I: Customizing the App and Document
+# NextJS workshop, part I: Common customizations and options
+
+Most of the time, we want app-wide settings such as a ThemeProvider, layout, or auth wrapper. However, we don't want to have to repeat ourselves for every page.
 
 You can add app-wide components and configs by customizing `_app.js`. For SSR performance, you can customize `_document.js` as well. We'll customize this app to use `styled-components` and have a custom Layout.
 
 You can find examples for `styled-components`, as well as many other popular tools, in the [NextJS GitHub repo](https://github.com/vercel/next.js/tree/canary/examples)
 
+### Module aliasing
+
+Fun tip: we can implement an alias for our 'components' directory:
+
+```
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["components/*"]
+    }
+  }
+}
+```
+
 ### \_app.js
 
-Think of this as a central location to put app-wide components, such as a Theme, Layout, AuthContext, etc.
+Let's set up our styling, and add "NextJS Demo" to the document head while we're at it:
 
 ```
 // create new file /pages/_app.js
@@ -39,7 +56,7 @@ export default MyApp
 Add the custom Layout that's been provided in `components`. This will add a Header, Footer, and styled body for all pages:
 
 ```
-// Update _app/js
+// Update _app.js
 import { ..., Layout, ... } from 'components'
 ...
       <>

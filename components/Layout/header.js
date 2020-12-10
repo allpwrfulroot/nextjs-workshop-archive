@@ -19,7 +19,6 @@ function Header() {
         <NavLink href="/">Home</NavLink>
         <NavLink href="/about">About</NavLink>
         <NavLink href="/contact">Contact</NavLink>
-        <NavLink href="/repos">Vercel</NavLink>
       </Nav>
     </>
   )
