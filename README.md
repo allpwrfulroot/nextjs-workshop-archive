@@ -1,110 +1,89 @@
-# NextJS workshop, part II: Next Router and Link
+# NextJS workshop, part I: Customizing the App and Document
 
-NextJS has components for making client-side routing easy: `next/link` and `next/router`
+You can add app-wide components and configs by customizing `_app.js`. For SSR performance, you can customize `_document.js` as well. We'll customize this app to use `styled-components` and have a custom Layout.
 
-### Link
+You can find examples for `styled-components`, as well as many other popular tools, in the [NextJS GitHub repo](https://github.com/vercel/next.js/tree/canary/examples)
 
-Client-side transitions are assisted with a special [Link component](https://nextjs.org/docs/api-reference/next/link):
+### \_app.js
 
-```
-// Update NavLink on /components/Layout/nav-link.js
-import Link from 'next/link'
-...
-function NavLink({ href, children }) {
-  return (
-    <Link href={href} passHref>
-      <StyledLink>{children}</StyledLink>
-    </Link>
-  )
-}
-```
-
-### Router
-
-NextJS also has its own [Router component](https://nextjs.org/docs/api-reference/next/router). Let's use the `useRouter` hook to highlight NavLink when we're on its page:
+Think of this as a central location to put app-wide components, such as a Theme, Layout, AuthContext, etc.
 
 ```
-// Update NavLink on /components/Layout/nav-link.js
-import { useRouter } from 'next/router'
-...
-function NavLink({ href, children }) {
-  const { pathname } = useRouter()
-  const path = pathname.split('/')[1]
-  const isActive = path ? href.includes(path) : href === '/'
-  return (
-    <Link href={href} passHref>
-      <StyledLink isActive={isActive}>{children}</StyledLink>
-    </Link>
-  )
-}
-```
-
-### Dynamic routes
-
-For a long list of blog posts or products, for example, you won't know the page data ahead of time even through all of the page "scaffolding" will be the same. We can handle that easy!
-
-```
-// create new file: /pages/repos/index.js
+// create new file /pages/_app.js
+// See more at https://nextjs.org/docs/advanced-features/custom-app
 import React from 'react'
-import PropTypes from 'prop-types'
-import Link from 'next/link'
+import Head from 'next/head'
+import { ThemeProvider } from 'styled-components'
 
-function RepoList({ repos }) {
+import { GlobalStyle, Layout, theme } from 'components'
+
+function MyApp({ Component, pageProps }) {
   return (
-    <>
-      <h3>Vercel repos on GitHub:</h3>
-      <ul>
-        {repos.map((item) => (
-          <li key={item.id}>
-            <Link href={`/repos/${item.name}`}>
-              <a>{item.name}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </>
+    <ThemeProvider theme={theme}>
+      <>
+        <Head>
+          <title>NextJS Demo</title>
+        </Head>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </>
+    </ThemeProvider>
   )
 }
 
-RepoList.propTypes = {
-  repos: PropTypes.array,
-}
-
-RepoList.defaultProps = {
-  repos: [{
-    id: 0, name: 'demo1'
-    id: 1, name: 'demo2'
-  }],
-}
-
-export default RepoList
+export default MyApp
 ```
 
+### Layout
+
+Add the custom Layout that's been provided in `components`. This will add a Header, Footer, and styled body for all pages:
+
 ```
-// create new file: /pages/repos/[repo].js
+// Update _app/js
+import { ..., Layout, ... } from 'components'
+...
+      <>
+        ...
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </>
+```
+
+### \_document.js
+
+Only applicable for SSR, but helps prevent FOUC. This is copied directly from the example in the NextJS repo
+
+```
+// create new file: /pages/_document.js
 import React from 'react'
-import PropTypes from 'prop-types'
+import Document from 'next/document'
+import { ServerStyleSheet } from 'styled-components'
 
-function RepoDetails({ name, stars = 3 }) {
-  if (!name || !stars) {
-    return <p>Loading...</p>
+export default class MyDocument extends Document {
+  static async getInitialProps(ctx) {
+    const sheet = new ServerStyleSheet()
+    const originalRenderPage = ctx.renderPage
+
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
+        })
+
+      const initialProps = await Document.getInitialProps(ctx)
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        ),
+      }
+    } finally {
+      sheet.seal()
+    }
   }
-
-  return (
-    <>
-      <h3>
-        PSA: {name} now has {stars} stars on GitHub
-      </h3>
-    </>
-  )
 }
-
-RepoDetails.propTypes = {
-  name: PropTypes.string,
-  stars: PropTypes.number,
-}
-
-export default RepoDetails
 ```
-
-Bonus question: Can you nest multiple dynamic routes?
