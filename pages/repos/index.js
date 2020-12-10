@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
-import fetch from 'isomorphic-unfetch'
 
 function RepoList({ repos }) {
   return (
@@ -21,15 +20,11 @@ function RepoList({ repos }) {
 }
 
 RepoList.propTypes = {
-  repos: PropTypes.array.isRequired,
+  repos: PropTypes.array,
 }
 
-export async function getServerSideProps() {
-  const reposList = await fetch('https://api.github.com/orgs/vercel/repos')
-  const json = await reposList.json()
-  return {
-    props: { repos: json }, // will be passed to the page component as props
-  }
+RepoList.defaultProps = {
+  repos: [],
 }
 
 export default RepoList
